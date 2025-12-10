@@ -1,0 +1,12 @@
+liste mot a deviner : ["L","I","E","N"]
+liste à envoyer au client : ["_","_","_","_"] -> ["_","_","E","_"]
+
+quand lettre envoyé :
+-> parcourir les deux liste
+-> si lettre envoyée est dans mot à deviner 
+	->si déjà dans à envoyer au client 
+		-> dire lettre déjà envoyée
+	->si pas dans à envoyer au client
+		-> remplacer "_" par la lettre
+	->renvoyer à envoyer au client
+-> sinon dire lettre pas dans mot + pendu
