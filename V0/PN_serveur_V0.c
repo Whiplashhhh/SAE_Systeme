@@ -1,3 +1,8 @@
+//Willem VANBAELINGHEM--DEZITTER
+//Thomas TEITEN
+//Alex FRANCOIS
+//Romain THEOBALD
+
 #include <stdio.h>
 #include <stdlib.h> /* pour exit */
 #include <unistd.h> /* pour read, write, close, sleep */
