@@ -15,8 +15,6 @@ int main(int argc, char *argv[]){
 	struct sockaddr_in sockaddrDistant;
 	socklen_t longueurAdresse;
 
-	int nb; /* nb d’octets écrits et lus */
-
 	char ip_dest[16];
 	int  port_dest;
 

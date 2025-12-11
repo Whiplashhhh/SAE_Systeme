@@ -13,7 +13,7 @@
 #define PORT 8000
 #define LG_MESSAGE 256
 
-int main(int argc, char *argv[])
+int main()
 {
 	int socketEcoute;
 
@@ -23,10 +23,7 @@ int main(int argc, char *argv[])
 	int socketDialogue;
 	struct sockaddr_in pointDeRencontreDistant;
 	char messageRecu[LG_MESSAGE]; /* le message de la couche Application ! */
-	int ecrits, lus;			  /* nb d’octets ecrits et lus */
-	int retour;
-
-	char buffer[] = "exit 5";
+	int lus;			  /* nb d’octets ecrits et lus */
 
 	// Crée un socket de communication
 	socketEcoute = socket(AF_INET, SOCK_STREAM, 0);
