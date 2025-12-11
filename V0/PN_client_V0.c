@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
 	char ip_dest[16];
 	int  port_dest;
 
-	// exemple de connextion à la socket :
+	// exemple de connexion à la socket :
 	// ./PN_client_V0.exe 127.0.0.1 8000
 	if (argc>2) { // si il y a au moins 2 arguments passés en ligne de commande
 		strncpy(ip_dest,argv[1],16);
@@ -27,9 +27,6 @@ int main(int argc, char *argv[]){
 		printf("USAGE : %s ip port message\n",argv[0]);
 		exit(-1);
 	}
-
-
-
 
 	// Crée un socket de communication
 	descripteurSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -82,20 +79,20 @@ int main(int argc, char *argv[]){
 
 	// Boucle de jeu
 	int partie_en_cours = 1;
-	char lettre[10]; // Buffer pour lire l'entrée utilisateur (on prend un peu de marge)
+	char lettre[10]; // Buffer pour lire l'entrée utilisateur
 
 	while (partie_en_cours) {
-		// 1. Saisie de la lettre
+		//Saisie de la lettre
 		printf("\nEntrez une lettre : ");
-		scanf("%s", lettre); // On lit une chaîne pour éviter les problèmes de buffer clavier
+		scanf("%s", lettre);
 
-		// 2. Envoi de la lettre (on envoie juste le premier caractère)
+		//Envoi de la lettre au serveur
 		if (send(descripteurSocket, lettre, 1, 0) == -1) {
 			perror("Erreur envoi lettre");
 			break;
 		}
 
-		// 3. Réception de la réponse
+		//Réception de la réponse du serveur
 		memset(messageServeur, 0, 256);
 		int lus = recv(descripteurSocket, messageServeur, sizeof(messageServeur)-1, 0);
 		if (lus <= 0) {
@@ -104,10 +101,10 @@ int main(int argc, char *argv[]){
 		}
 		messageServeur[lus] = '\0';
 
-		// 4. Analyse et affichage
 		// Format attendu : CODE MOT_MASQUE VIES
-		// Ex: OK S_S____ 10
 		// Ex: WIN SYSTEME 10
+		// Ex: OK S_S____ 10
+
 		
 		char code[20], mot[100];
 		int vies;

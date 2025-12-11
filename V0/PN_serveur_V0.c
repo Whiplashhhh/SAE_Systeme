@@ -22,15 +22,15 @@ int main()
 
 	int socketDialogue;
 	struct sockaddr_in pointDeRencontreDistant;
-	char messageRecu[LG_MESSAGE]; /* le message de la couche Application ! */
-	int lus;			  /* nb d’octets ecrits et lus */
+	char messageRecu[LG_MESSAGE];
+	int lus; //nb d'octets lu si connexion fermée <0
 
 	// Crée un socket de communication
 	socketEcoute = socket(AF_INET, SOCK_STREAM, 0);
 	// Teste la valeur renvoyée par l’appel système socket()
 	if (socketEcoute < 0)
 	{
-		perror("socket"); // Affiche le message d’erreur
+		perror("socket");
 		exit(-1);		  // On sort en indiquant un code erreur
 	}
 	printf("Socket créée avec succès ! (%d)\n", socketEcoute); // On prépare l’adresse d’attachement locale
@@ -77,7 +77,7 @@ int main()
 			exit(-4);
 		}
 
-		// --- DÉBUT DE LA PARTIE PENDU ---
+		//Début de la partie
 		char mot_secret[] = "SYSTEME"; // Le mot à deviner
 		int taille_mot = strlen(mot_secret);
 		char mot_masque[taille_mot + 1]; // Le mot masqué envoyé au client
@@ -94,24 +94,24 @@ int main()
 		char message_start[LG_MESSAGE];
 		sprintf(message_start, "start %d", taille_mot);
 
-		// Envoi du message de début au client
+		// Envoi du message
 		if (send(socketDialogue, message_start, strlen(message_start), 0) == -1)
 		{
 			perror("Erreur lors de l'envoi du start");
 			close(socketDialogue);
-			continue; // On passe au client suivant
+			continue; // Client suivant si erreur
 		}
 		printf("Nouvelle partie démarrée. Mot : %s (%d lettres). Envoi de '%s'\n", mot_secret, taille_mot, message_start);
 
 		// Liste des lettres déjà jouées
-		char lettres_jouees[27] = ""; // Max 26 lettres + '\0'
+		char lettres_jouees[27] = "";
 		int nb_lettres_jouees = 0;
 
 		// Boucle de jeu pour ce client
 		int partie_finie = 0;
 		while (!partie_finie)
 		{
-			// 1. Réception de la lettre du client
+			// Réception de la lettre envoyé par le client
 			char lettre_recue;
 			lus = recv(socketDialogue, &lettre_recue, 1, 0);
 			if (lus <= 0) {
@@ -119,13 +119,13 @@ int main()
 				break;
 			}
 
-			// Convertir en majuscule pour simplifier la comparaison
+			//Convertiion en majuscule pour la comparaison
 			if (lettre_recue >= 'a' && lettre_recue <= 'z') {
 				lettre_recue = lettre_recue - 'a' + 'A';
 			}
 			printf("Lettre reçue : %c\n", lettre_recue);
 
-			// 2. Vérifier si la lettre a déjà été jouée
+			//Vérifier si la lettre a déjà été jouée
 			int deja_jouee = 0;
 			for (int i = 0; i < nb_lettres_jouees; i++) {
 				if (lettres_jouees[i] == lettre_recue) {
@@ -138,15 +138,15 @@ int main()
 			memset(reponse, 0, LG_MESSAGE);
 
 			if (deja_jouee) {
-				// Lettre déjà jouée
+				//Si lettre déjà jouée
 				sprintf(reponse, "ALREADY %s %d", mot_masque, vies);
 				printf("Lettre déjà jouée. Réponse : %s\n", reponse);
 			} else {
-				// Ajouter la lettre à la liste des lettres jouées
+				//Ajout à la liste des lettres jouées
 				lettres_jouees[nb_lettres_jouees] = lettre_recue;
 				nb_lettres_jouees++;
 
-				// 3. Vérifier si la lettre est dans le mot
+				//Vérifier si la lettre est dans le mot
 				int lettre_trouvee = 0;
 				for (int i = 0; i < taille_mot; i++) {
 					if (mot_secret[i] == lettre_recue) {
@@ -156,7 +156,7 @@ int main()
 				}
 
 				if (lettre_trouvee) {
-					// Vérifier si le mot est complètement trouvé
+					// Vérifier si le mot est complet
 					if (strcmp(mot_masque, mot_secret) == 0) {
 						sprintf(reponse, "WIN %s %d", mot_secret, vies);
 						partie_finie = 1;
@@ -166,7 +166,7 @@ int main()
 						printf("Lettre trouvée. Réponse : %s\n", reponse);
 					}
 				} else {
-					// Lettre pas dans le mot -> perte d'une vie
+					// Lettre pas dans le mot, perte d'une vie
 					vies--;
 					if (vies <= 0) {
 						sprintf(reponse, "LOSE %s %d", mot_secret, vies);
@@ -179,7 +179,7 @@ int main()
 				}
 			}
 
-			// 4. Envoyer la réponse au client
+			// 4. Envoie de la réponse au client
 			if (send(socketDialogue, reponse, strlen(reponse), 0) == -1) {
 				perror("Erreur envoi réponse");
 				break;
@@ -189,8 +189,4 @@ int main()
 		printf("Fin de la partie pour ce client.\n");
 		close(socketDialogue);
 	}
-
-	// On ferme la ressource avant de quitter
-	close(socketEcoute);
-	return 0;
 }
