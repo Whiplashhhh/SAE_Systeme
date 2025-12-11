@@ -3,6 +3,8 @@
 //Alex FRANCOIS
 //Romain THEOBALD
 
+//V0
+
 #include <stdio.h>
 #include <stdlib.h> /* pour exit */
 #include <unistd.h> /* pour read, write, close, sleep */
