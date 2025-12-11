@@ -1,6 +1,3 @@
-//
-// Created by willem on 10/12/2025.
-//
 #include <stdio.h>
 #include <stdlib.h> /* pour exit */
 #include <unistd.h> /* pour read, write, close, sleep */
@@ -179,7 +176,7 @@ int main()
 				}
 			}
 
-			// 4. Envoie de la réponse au client
+			// Envoie de la réponse au client
 			if (send(socketDialogue, reponse, strlen(reponse), 0) == -1) {
 				perror("Erreur envoi réponse");
 				break;
