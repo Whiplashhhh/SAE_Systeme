@@ -76,8 +76,8 @@ int main()
 		int taille_mot = strlen(mot_secret);
 
 		// Envoi "wait x" au client 1
-		char message_wait[LG_MESSAGE];
-		sprintf(message_wait, "wait %d", taille_mot);
+		char message_wait[LG_MESSAGE]; //le buffer[LG_MESSAGE] reçoit la valeur du sprintf
+		sprintf(message_wait, "wait %d", taille_mot); // "wait x", x = taille du mot
 		if (send(socketClient1, message_wait, strlen(message_wait), 0) == -1)
 		{
 			perror("Erreur envoi wait au client 1");
@@ -98,8 +98,8 @@ int main()
 		printf("Joueur 2 connecté!\n");
 
 		// Envoi "start x" au client 2
-		char message_start[LG_MESSAGE];
-		sprintf(message_start, "start %d", taille_mot);
+		char message_start[LG_MESSAGE]; //le buffer[LG_MESSAGE] reçoit la valeur du sprintf
+		sprintf(message_start, "start %d", taille_mot); //"start 7"
 		if (send(socketClient2, message_start, strlen(message_start), 0) == -1)
 		{
 			perror("Erreur envoi start au client 2");

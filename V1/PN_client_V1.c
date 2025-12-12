@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
 	int  port_dest;
 
 	// exemple de connexion à la socket :
-	// ./PN_client_V0.exe 127.0.0.1 8000
+	// ./PN_client_V1.exe 127.0.0.1 8000
 	if (argc>2) { // si il y a au moins 2 arguments passés en ligne de commande
 		strncpy(ip_dest,argv[1],16);
 		sscanf(argv[2],"%d",&port_dest);
