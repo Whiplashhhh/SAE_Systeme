@@ -132,8 +132,8 @@ int main()
 		mot_masque2[taille_mot] = '\0';
 
 		// Vies de chaque joueur
-		int vies1 = 10;
-		int vies2 = 10;
+		int vies1 = 2;
+		int vies2 = 2;
 
 		// Lettres jouées par chaque joueur
 		char lettres_jouees1[27] = "";
@@ -329,6 +329,8 @@ int main()
 						if (autreActif)
 						{
 							send(socketAttente, info, strlen(info), 0);
+							// Délai pour laisser le client traiter INFO LOSE avant de recevoir TURN
+							usleep(100000); // 100ms
 						}
 
 						// Vérifier si les deux ont perdu
