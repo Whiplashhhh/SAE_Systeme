@@ -132,8 +132,8 @@ int main()
 		mot_masque2[taille_mot] = '\0';
 
 		// Vies de chaque joueur
-		int vies1 = 2;
-		int vies2 = 2;
+		int vies1 = 10;
+		int vies2 = 10;
 
 		// Lettres jouées par chaque joueur
 		char lettres_jouees1[27] = "";
