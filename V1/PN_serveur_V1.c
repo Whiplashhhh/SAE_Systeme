@@ -1,10 +1,3 @@
-// Willem VANBAELINGHEM--DEZITTER
-// Thomas TEITEN
-// Alex FRANCOIS
-// Romain THEOBALD
-
-// V1
-
 #include <stdio.h>
 #include <stdlib.h> /* pour exit */
 #include <unistd.h> /* pour read, write, close, sleep */
@@ -62,13 +55,13 @@ int main()
 	// boucle d'attente de connexion
 	while (1)
 	{
-		printf("=== En attente de 2 joueurs ===\n\n");
+		printf("-En attente de 2 joueurs-\n\n");
 
 		// Variables pour les 2 clients
 		int socketClient1, socketClient2;
 		struct sockaddr_in adresseClient1, adresseClient2;
 
-		// ===== CONNEXION CLIENT 1 =====
+		// Client 1
 		printf("Attente du joueur 1...\n");
 		socketClient1 = accept(socketEcoute, (struct sockaddr *)&adresseClient1, &longueurAdresse);
 		if (socketClient1 < 0)
@@ -93,7 +86,7 @@ int main()
 		}
 		printf("Envoyé '%s' au joueur 1. En attente du joueur 2...\n", message_wait);
 
-		// ===== CONNEXION CLIENT 2 =====
+		// Client 2
 		printf("Attente du joueur 2...\n");
 		socketClient2 = accept(socketEcoute, (struct sockaddr *)&adresseClient2, &longueurAdresse);
 		if (socketClient2 < 0)
@@ -118,9 +111,9 @@ int main()
 
 		printf("\n=== Partie lancée! Mot: %s (%d lettres) ===\n\n", mot_secret, taille_mot);
 
-		// ===== INITIALISATION DES 2 JOUEURS =====
+		// Initialisation des 2 joueurs
 
-		// Mot masqué pour chaque joueur
+		// Mots masqués
 		char mot_masque1[taille_mot + 1];
 		char mot_masque2[taille_mot + 1];
 		for (int i = 0; i < taille_mot; i++)
@@ -131,11 +124,11 @@ int main()
 		mot_masque1[taille_mot] = '\0';
 		mot_masque2[taille_mot] = '\0';
 
-		// Vies de chaque joueur
+		// Vies
 		int vies1 = 10;
 		int vies2 = 10;
 
-		// Lettres jouées par chaque joueur
+		// Lettres jouées par les joueurs
 		char lettres_jouees1[27] = "";
 		char lettres_jouees2[27] = "";
 		int nb_lettres_jouees1 = 0;
@@ -148,7 +141,7 @@ int main()
 		// Tour actuel (2 = client 2 commence)
 		int tour_actuel = 2;
 
-		// Petit délai pour que les clients traitent les messages start/wait
+		// délai pour que les clients traitent les messages start/wait correctement
 		usleep(100000); // 100ms
 
 		// Boucle de jeu
@@ -157,7 +150,7 @@ int main()
 		{
 			// Déterminer le joueur actif et le joueur en attente
 			int socketActif, socketAttente;
-			int *viesActif, *viesAttente;
+			int *viesActif;
 			char *mot_masqueActif;
 			char *lettres_joueesActif;
 			int *nb_lettres_joueesActif;
@@ -184,7 +177,7 @@ int main()
 				clientActif_actif = &client2_actif;
 			}
 
-			// Vérifier si le joueur actif est encore en jeu
+			// joueur actif ?
 			if (!(*clientActif_actif))
 			{
 				// Passer au joueur suivant
@@ -227,7 +220,7 @@ int main()
 			{
 				printf("Le joueur %d a fermé la connexion.\n", tour_actuel);
 				*clientActif_actif = 0;
-				// Si l'autre joueur est actif, il gagne par forfait? Non, on continue
+				// Si l'un quitte l'autre doit finir la partie
 				tour_actuel = (tour_actuel == 1) ? 2 : 1;
 				continue;
 			}
@@ -368,7 +361,7 @@ int main()
 				}
 			}
 
-			// Petit délai pour éviter la concaténation des messages TCP
+			// délai pour éviter la concaténation des messages TCP
 			usleep(50000); // 50ms
 
 			// Alterner le tour

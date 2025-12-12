@@ -1,10 +1,3 @@
-//Willem VANBAELINGHEM--DEZITTER
-//Thomas TEITEN
-//Alex FRANCOIS
-//Romain THEOBALD
-
-//V1
-
 #include <stdio.h>
 #include <stdlib.h> /* pour exit */
 #include <unistd.h> /* pour read, write, close, sleep */
@@ -76,7 +69,7 @@ int main(int argc, char *argv[]){
 		messageServeur[nbLus] = '\0';
 		printf("Message du serveur : %s\n", messageServeur);
 		
-		// Vérifier si c'est "wait" ou "start"
+		// Vérification "wait" ou "start"
 		if (strncmp(messageServeur, "wait", 4) == 0) {
 			printf("\n>>> En attente d'un adversaire...\n");
 		} else if (strncmp(messageServeur, "start", 5) == 0) {
@@ -93,7 +86,7 @@ int main(int argc, char *argv[]){
 	char lettre[10]; // Buffer pour lire l'entrée utilisateur
 
 	while (partie_en_cours) {
-		// Attendre un message du serveur (TURN, WAIT, ou fin de partie)
+		// Attente du serveur (TURN, WAIT, ou fin de partie)
 		memset(messageServeur, 0, 256);
 		nbLus = recv(descripteurSocket, messageServeur, sizeof(messageServeur)-1, 0);
 		if (nbLus <= 0) {
@@ -104,7 +97,6 @@ int main(int argc, char *argv[]){
 
 		// Analyser le message reçu
 		if (strcmp(messageServeur, "TURN") == 0) {
-			// C'est notre tour de jouer
 			printf("\n>>> C'est votre tour!\n");
 			printf("Entrez une lettre : ");
 			scanf("%s", lettre);
@@ -124,7 +116,7 @@ int main(int argc, char *argv[]){
 			}
 			messageServeur[nbLus] = '\0';
 
-			// Analyser la réponse (OK, NOK, WIN, LOSE, ALREADY)
+			// Analyse de la réponse (OK, NOK, WIN, LOSE, ALREADY)
 			char code[20], mot[100];
 			int vies;
 			sscanf(messageServeur, "%s %s %d", code, mot, &vies);
@@ -144,10 +136,9 @@ int main(int argc, char *argv[]){
 			}
 		}
 		else if (strcmp(messageServeur, "WAIT") == 0) {
-			// C'est le tour de l'adversaire
 			printf("\n>>> Tour de l'adversaire, veuillez patienter...\n");
 
-			// Attendre le message INFO du serveur
+			// Attendre le message "INFO" du serveur
 			memset(messageServeur, 0, 256);
 			nbLus = recv(descripteurSocket, messageServeur, sizeof(messageServeur)-1, 0);
 			if (nbLus <= 0) {
@@ -156,7 +147,7 @@ int main(int argc, char *argv[]){
 			}
 			messageServeur[nbLus] = '\0';
 
-			// Analyser le message INFO
+			// Analyse "INFO"
 			if (strcmp(messageServeur, "INFO OK") == 0) {
 				printf("L'adversaire a trouvé une lettre!\n");
 			} else if (strcmp(messageServeur, "INFO NOK") == 0) {
@@ -171,7 +162,7 @@ int main(int argc, char *argv[]){
 			}
 		}
 		else if (strcmp(messageServeur, "OPPONENT_WIN") == 0) {
-			// L'adversaire a gagné pendant qu'on attendait
+			// L'adversaire a gagné pendant son tour
 			printf("\n>>> L'adversaire a trouvé le mot! Vous avez PERDU.\n");
 			partie_en_cours = 0;
 		}
